@@ -1,0 +1,14 @@
+# Database connection
+pyodbc
+
+# I2C communication
+smbus2
+
+# AWS SDK for S3 upload (if needed)
+boto3
+
+# RPi.GPIO for GPIO control on Raspberry Pi
+RPi.GPIO
+
+# suntime library to determine "mid-day" for the sun
+suntime
