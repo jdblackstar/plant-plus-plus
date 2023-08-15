@@ -1,7 +1,7 @@
 class Plant:
     """Class representing a plant with specific light and care requirements."""
 
-    def __init__(self, foot_candle_hours, max_sunlight_length, rest_time):
+    def __init__(self, lux_hours, max_sunlight_length, rest_time):
         """
         Initialize the plant with the given parameters.
 
@@ -10,11 +10,11 @@ class Plant:
             max_sunlight_length (int): Maximum number of sunlight hours per day.
             rest_time (int): Rest time in hours when no light should be provided.
         """
-        self.foot_candle_hours = foot_candle_hours
+        self.lux_hours = lux_hours
         self.max_sunlight_length = max_sunlight_length
         self.rest_time = rest_time
 
-    def needs_light(self, accumulated_foot_candles):
+    def needs_light(self, accumulated_lux):
         """
         Determine if the plant needs additional light based on the accumulated foot-candle hours.
 
@@ -24,4 +24,4 @@ class Plant:
         Returns:
             bool: True if the plant needs additional light, False otherwise.
         """
-        return accumulated_foot_candles < self.foot_candle_hours
+        return accumulated_lux < self.lux_hours

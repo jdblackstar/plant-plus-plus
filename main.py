@@ -45,25 +45,25 @@ sunset = sun.get_sunset_time()
 mid_day = sunrise + (sunset - sunrise) / 2
 
 # Main loop
-accumulated_foot_candles = 0
+accumulated_lux = 0
 while True:
     current_time = datetime.now()
 
     # If it's a new day, reset the accumulated foot-candles
     if current_time > sunrise and current_time < sunrise + timedelta(minutes=10):
-        accumulated_foot_candles = 0
+        accumulated_lux = 0
 
     # If it's mid-day, evaluate the need for supplemental light
     if current_time > mid_day and current_time < mid_day + timedelta(minutes=10):
-        if accumulated_foot_candles < plant.foot_candle_hours * 0.3:
+        if accumulated_lux < plant.lux_hours * 0.3:
             GPIO.output(LED_PIN, True)
         else:
             GPIO.output(LED_PIN, False)
-            accumulated_foot_candles = plant.foot_candle_hours
+            accumulated_lux = plant.lux_hours
 
     # Record and accumulate the current foot-candles
-    current_foot_candles = light_sensor.read_foot_candles()
-    accumulated_foot_candles += current_foot_candles
+    current_lux = light_sensor.read_lux()
+    accumulated_lux += current_lux
 
     # Sleep for a minute (adjust as needed)
     time.sleep(60)

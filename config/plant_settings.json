@@ -1,16 +1,16 @@
 {
     "Monstera": {
-      "foot_candle_hours": 800,
+      "lux_hours": 800,
       "max_sunlight_length": 14,
       "rest_time": 10
     },
     "RubberPlant": {
-      "foot_candle_hours": 250,
+      "lux_hours": 250,
       "max_sunlight_length": 16,
       "rest_time": 8
     },
     "ZZPlant": {
-      "foot_candle_hours": 500,
+      "lux_hours": 500,
       "max_sunlight_length": 12,
       "rest_time": 12
     }
