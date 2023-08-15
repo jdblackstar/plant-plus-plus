@@ -1,0 +1,8 @@
+{
+    "sensor_type": "BH1750",
+    "led_pin": 18,
+    "plant_type": "Monstera",
+    "data_record_interval": 60,
+    "upload_interval": 3600
+  }
+  
