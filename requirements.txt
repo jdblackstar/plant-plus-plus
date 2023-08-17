@@ -12,3 +12,12 @@ RPi.GPIO
 
 # suntime library to determine "mid-day" for the sun
 suntime
+
+# Libraries for LEDs
+board
+neopixel
+time
+# have to run the following lines, will look at how to implement this later on
+# will probably be in a .sh file
+# sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
+# sudo python3 -m pip install --force-reinstall adafruit-blinka
