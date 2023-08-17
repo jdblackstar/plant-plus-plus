@@ -1,10 +1,12 @@
 import json
 import time
 from datetime import datetime, timedelta
-from suntime import Sun
+
 import RPi.GPIO as GPIO
-from sensors.light import BH1750Sensor
+from suntime import Sun
+
 from plants.plant import Plant
+from sensors.light import BH1750Sensor
 from utils.factory import create_sensor
 
 # Constants
@@ -14,16 +16,19 @@ LED_PIN = 18
 CONFIG_FILE = "config/settings.json"
 PLANT_CONFIG_FILE = "plants/plant_config.json"
 
+
 # Function to load configuration
 def load_config(file_path):
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         return json.load(file)
+
 
 # Function to load plant configuration
 def load_plant_config(file_path, plant_type):
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         plant_data = json.load(file)
         return plant_data[plant_type]
+
 
 # Set up the LED pin
 GPIO.setmode(GPIO.BCM)

@@ -1,6 +1,8 @@
+import time
+
 import board
 import neopixel
-import time
+
 
 class LED:
     def __init__(self, pin, num_leds):
@@ -15,6 +17,7 @@ class LED:
 
     def set_color(self, color):
         pass
+
 
 class NeoPixelLED(LED):
     def __init__(self, pin, num_leds):
@@ -42,7 +45,7 @@ class NeoPixelLED(LED):
             color = (
                 int(start_color[0] + (end_color[0] - start_color[0]) * ratio),
                 int(start_color[1] + (end_color[1] - start_color[1]) * ratio),
-                int(start_color[2] + (end_color[2] - start_color[2]) * ratio)
+                int(start_color[2] + (end_color[2] - start_color[2]) * ratio),
             )
 
             self.set_color(color)
