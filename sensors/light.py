@@ -4,7 +4,7 @@ from smbus2 import SMBus
 class LightSensor:
     """Abstract base class for light sensors."""
 
-    def read_foot_candles(self):
+    def read_lux(self):
         raise NotImplementedError("This method should be overridden by a subclass")
 
 
