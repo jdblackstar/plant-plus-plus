@@ -62,12 +62,10 @@ class BH1750Sensor(LightSensor):
     def initialize(self):
         """
         Initialize the sensor.
-        
-        Note: This method should be called before any other methods.
         """
         try:
             self.power_on()
-            self.reset()
+            self.reset() # resets to default settings, we'll have to test if that's what we want
         except Exception as e:
             logger.error(f"An error occurred while initializing the sensor: {e}")
 
@@ -82,7 +80,9 @@ class BH1750Sensor(LightSensor):
             logger.error(f"An error occurred while powering on the sensor: {e}")
 
     def power_off(self):
-        """Power off the sensor."""
+        """
+        Power off the sensor.
+        """
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, self.POWER_DOWN)
@@ -90,7 +90,9 @@ class BH1750Sensor(LightSensor):
             logger.error(f"An error occurred while powering off the sensor: {e}")
 
     def reset(self):
-        """Reset the sensor to default settings."""
+        """
+        Reset the sensor to default settings.
+        """
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, self.RESET)
@@ -98,7 +100,15 @@ class BH1750Sensor(LightSensor):
             logger.error(f"An error occurred while resetting the sensor: {e}")
 
     def read_lux(self, mode=CONTINUOUS_HIGH_RES):
-        """Read lux value from the sensor."""
+        """
+        Read lux value from the sensor.
+        
+        Args:
+            mode (int): Mode to use for reading lux. Defaults to CONTINUOUS_HIGH_RES.
+            
+        Returns:
+            float: Lux value read from the sensor.
+        """
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, mode)
@@ -112,7 +122,16 @@ class BH1750Sensor(LightSensor):
             return None
 
     def set_measurement_time(self, high_bits, low_bits):
-        """Set the measurement time for the sensor."""
+        """
+        Set the measurement time for the sensor.
+        
+        Args:
+            high_bits (int): High bits for the measurement time.
+            low_bits (int): Low bits for the measurement time.
+            
+        Note: The measurement time is calculated as follows:
+            Measurement time = (256 * high_bits + low_bits) * 24 * 10^-3 ms
+        """
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, 0b01000000 | high_bits)  # High bits
@@ -122,7 +141,9 @@ class BH1750Sensor(LightSensor):
 
 
 class TSL2561Sensor(LightSensor):
-    """Class for the TSL2561 light sensor."""
+    """
+    Class for the TSL2561 light sensor.
+    """
 
     # We aren't implementing this sensor yet, so nothing to put here
 
