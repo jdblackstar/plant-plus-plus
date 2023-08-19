@@ -14,11 +14,6 @@ class LightSensor(ABC):
         pass
 
     @abstractmethod
-    def read_lux(self, mode=None):
-        """Read lux value from the sensor."""
-        pass
-
-    @abstractmethod
     def power_on(self):
         """Power on the sensor."""
         pass
@@ -31,6 +26,11 @@ class LightSensor(ABC):
     @abstractmethod
     def reset(self):
         """Reset the sensor to default settings."""
+        pass
+
+    @abstractmethod
+    def read_lux(self, mode=None):
+        """Read lux value from the sensor."""
         pass
 
     @abstractmethod
@@ -60,7 +60,11 @@ class BH1750Sensor(LightSensor):
     ONE_TIME_LOW_RES = 0x23
 
     def initialize(self):
-        """Initialize the sensor."""
+        """
+        Initialize the sensor.
+        
+        Note: This method should be called before any other methods.
+        """
         try:
             self.power_on()
             self.reset()
@@ -68,7 +72,9 @@ class BH1750Sensor(LightSensor):
             logger.error(f"An error occurred while initializing the sensor: {e}")
 
     def power_on(self):
-        """Power on the sensor."""
+        """
+        Power on the sensor.
+        """
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, self.POWER_ON)

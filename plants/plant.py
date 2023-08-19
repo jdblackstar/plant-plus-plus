@@ -1,5 +1,7 @@
 class Plant:
-    """Class representing a plant with specific light and care requirements."""
+    """
+    Class representing a plant with specific light and care requirements.
+    """
 
     def __init__(self, lux_hours, max_sunlight_length, rest_time):
         """
