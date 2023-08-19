@@ -1,18 +1,18 @@
 {
-    "Monstera": {
-      "lux_hours": 800,
-      "max_sunlight_length": 14,
-      "rest_time": 10
-    },
-    "RubberPlant": {
-      "lux_hours": 250,
-      "max_sunlight_length": 16,
-      "rest_time": 8
-    },
-    "ZZPlant": {
-      "lux_hours": 500,
-      "max_sunlight_length": 12,
-      "rest_time": 12
-    }
+  "Monstera": {
+    "lux_hours": 800,
+    "max_sunlight_length": 14,
+    "rest_time": 10
+  },
+  "RubberPlant": {
+    "lux_hours": 250,
+    "max_sunlight_length": 16,
+    "rest_time": 8
+  },
+  "ZZPlant": {
+    "lux_hours": 500,
+    "max_sunlight_length": 12,
+    "rest_time": 12
   }
+}
   
