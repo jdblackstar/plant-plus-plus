@@ -61,54 +61,90 @@ class BH1750Sensor(LightSensor):
 
     def initialize(self):
         """
-        Initialize the sensor.
+        Initialize the sensor by powering it on and resetting it.
+
+        Raises:
+            IOError: If an I/O error occurs while initializing the sensor.
         """
+
         try:
             self.power_on()
-            self.reset() # resets to default settings, we'll have to test if that's what we want
+            self.reset()
+        except IOError as e:
+            logger.error(f"An I/O error occurred while initializing the sensor: {e}")
         except Exception as e:
-            logger.error(f"An error occurred while initializing the sensor: {e}")
+            logger.error(
+                f"An unexpected error occurred while initializing the sensor: {e}"
+            )
 
     def power_on(self):
         """
-        Power on the sensor.
+        Power on the sensor by writing to the sensor's address.
+
+        Raises:
+            IOError: If an I/O error occurs while powering on the sensor.
         """
+
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, self.POWER_ON)
+        except IOError as e:
+            logger.error(f"An I/O error occurred while powering on the sensor: {e}")
         except Exception as e:
-            logger.error(f"An error occurred while powering on the sensor: {e}")
+            logger.error(
+                f"An unexpected error occurred while powering on the sensor: {e}"
+            )
 
     def power_off(self):
         """
-        Power off the sensor.
+        Power off the sensor by writing to the sensor's address.
+
+        Raises:
+            IOError: If an I/O error occurs while powering off the sensor.
         """
+
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, self.POWER_DOWN)
+        except IOError as e:
+            logger.error(f"An I/O error occurred while powering off the sensor: {e}")
         except Exception as e:
-            logger.error(f"An error occurred while powering off the sensor: {e}")
+            logger.error(
+                f"An unexpected error occurred while powering off the sensor: {e}"
+            )
 
     def reset(self):
         """
-        Reset the sensor to default settings.
+        Reset the sensor to its default settings by writing to the sensor's address.
+
+        Raises:
+            IOError: If an I/O error occurs while resetting the sensor.
         """
+
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, self.RESET)
+        except IOError as e:
+            logger.error(f"An I/O error occurred while resetting the sensor: {e}")
         except Exception as e:
-            logger.error(f"An error occurred while resetting the sensor: {e}")
+            logger.error(
+                f"An unexpected error occurred while resetting the sensor: {e}"
+            )
 
     def read_lux(self, mode=CONTINUOUS_HIGH_RES):
         """
-        Read lux value from the sensor.
-        
+        Read the lux value from the sensor.
+
         Args:
-            mode (int): Mode to use for reading lux. Defaults to CONTINUOUS_HIGH_RES.
-            
+            mode (int): The mode to use for reading lux. Default is CONTINUOUS_HIGH_RES.
+
         Returns:
-            float: Lux value read from the sensor.
+            float: The lux value read from the sensor.
+
+        Raises:
+            IOError: If an I/O error occurs while reading lux from the sensor.
         """
+
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, mode)
@@ -117,27 +153,41 @@ class BH1750Sensor(LightSensor):
                 lux_data = bus.read_i2c_block_data(self.ADDRESS, mode, 2)
                 lux = (lux_data[0] << 8 | lux_data[1]) / 1.2
                 return lux
+        except IOError as e:
+            logger.error(
+                f"An I/O error occurred while reading lux from the sensor: {e}"
+            )
+            return None
         except Exception as e:
-            logger.error(f"An error occurred while reading lux from the sensor: {e}")
+            logger.error(
+                f"An unexpected error occurred while reading lux from the sensor: {e}"
+            )
             return None
 
     def set_measurement_time(self, high_bits, low_bits):
         """
         Set the measurement time for the sensor.
-        
+
         Args:
-            high_bits (int): High bits for the measurement time.
-            low_bits (int): Low bits for the measurement time.
-            
-        Note: The measurement time is calculated as follows:
-            Measurement time = (256 * high_bits + low_bits) * 24 * 10^-3 ms
+            high_bits (int): The high bits to set for the measurement time.
+            low_bits (int): The low bits to set for the measurement time.
+
+        Raises:
+            IOError: If an I/O error occurs while setting the measurement time.
         """
+
         try:
             with SMBus(1) as bus:
                 bus.write_byte(self.ADDRESS, 0b01000000 | high_bits)  # High bits
                 bus.write_byte(self.ADDRESS, 0b01100000 | low_bits)  # Low bits
+        except IOError as e:
+            logger.error(
+                f"An I/O error occurred while setting the measurement time: {e}"
+            )
         except Exception as e:
-            logger.error(f"An error occurred while setting the measurement time: {e}")
+            logger.error(
+                f"An unexpected error occurred while setting the measurement time: {e}"
+            )
 
 
 class TSL2561Sensor(LightSensor):
