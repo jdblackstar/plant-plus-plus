@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ ! -f .env ]; then
+    echo "Error: .env file not found. Please add a .env file with the required variables for update."
+    exit 1
+fi
+
 # sourcing directories and IP addresses from .env file
 source .env
 
