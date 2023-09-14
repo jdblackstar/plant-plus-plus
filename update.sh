@@ -1,19 +1,19 @@
 #!/bin/bash
 
+# sourcing directories and IP addresses from .env file
+source .env
+
 # List of Raspberry Pi IP addresses
-RASPBERRY_PIS=(
-    "192.168.1.10"
-    "192.168.1.11"
-    "192.168.1.12"
-)
+IFS=' ' read -r -a RASPBERRY_PI_IPS <<< "$RASPBERRY_PI_IPS"
 
-# Directory containing your project on your local machine
-PROJECT_DIR="/path/to/your/project"
+# Make sure that your .env file contains both PROJECT_DIR and DEST_DIR
 
-# Directory where you want to copy your project on the Raspberry Pi
-DEST_DIR="/home/pi/"
+# PROJECT_DIR is a space-separated string, like this:
+# RASPBERRY_PIS="192.168.1.10 192.168.1.11 192.168.1.12"
 
-for ip in "${RASPBERRY_PIS[@]}"; do
+# DEST_DIR will likely just be "/home/pi"
+
+for ip in "${RASPBERRY_PI_IPS[@]}"; do
     echo "Deploying to Raspberry Pi at $ip"
     scp -r $PROJECT_DIR pi@$ip:$DEST_DIR
 done
