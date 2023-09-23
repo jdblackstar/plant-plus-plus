@@ -1,0 +1,28 @@
+# Database connection
+pyodbc
+
+# I2C communication
+smbus2
+
+# AWS SDK for S3 upload (if needed)
+boto3
+
+# RPi.GPIO for GPIO control on Raspberry Pi
+RPi.GPIO
+
+# suntime library to determine "mid-day" for the sun
+suntime
+
+# Libraries for LEDs
+board
+neopixel
+time
+# have to run the following lines, will look at how to implement this later on
+# will probably be in a .sh file
+# sudo pip3 install rpi_ws281x adafruit-circuitpython-neopixel
+# sudo python3 -m pip install --force-reinstall adafruit-blinka
+
+abc
+
+# logging
+loguru
