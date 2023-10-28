@@ -1,5 +1,4 @@
 import utime as time
-from abc import ABC, abstractmethod
 
 try:
     from machine import I2C, Pin
@@ -7,35 +6,29 @@ except ImportError:
     from mock_machine import I2C, Pin
 
 
-class LightSensor(ABC):
+class LightSensor():
     """Abstract base class for light sensors."""
 
-    @abstractmethod
     def initialize(self):
         """Initialize the sensor."""
         pass
 
-    @abstractmethod
     def power_on(self):
         """Power on the sensor."""
         pass
 
-    @abstractmethod
     def power_off(self):
         """Power off the sensor."""
         pass
 
-    @abstractmethod
     def reset(self):
         """Reset the sensor to default settings."""
         pass
 
-    @abstractmethod
     def read_lux(self, mode=None):
         """Read lux value from the sensor."""
         pass
 
-    @abstractmethod
     def set_measurement_time(self, high_bits=None, low_bits=None):
         """Set the measurement time for the sensor (if applicable)."""
         pass
@@ -60,7 +53,7 @@ class BH1750Sensor(LightSensor):
     ONE_TIME_LOW_RES = 0x23
 
     def __init__(self):
-        self.i2c = I2C(scl=Pin(5), sda=Pin(4))  # adjust to your I2C pins
+        self.i2c = I2C(0, scl=Pin(21), sda=Pin(20))  # adjust to your I2C pins
 
     def initialize(self):
         self.power_on()
