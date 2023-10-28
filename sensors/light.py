@@ -1,8 +1,10 @@
-import time
+import utime as time
 from abc import ABC, abstractmethod
 
-from loguru import logger
-from smbus2 import SMBus
+try:
+    from machine import I2C, Pin
+except ImportError:
+    from mock_machine import I2C, Pin
 
 
 class LightSensor(ABC):
@@ -44,8 +46,6 @@ class LightSensor(ABC):
 class BH1750Sensor(LightSensor):
     """
     Class for the BH1750 light sensor.
-
-    datasheet URL: https://www.mouser.com/datasheet/2/348/bh1750fvi-e-186247.pdf
     """
 
     ADDRESS = 0x23
@@ -59,135 +59,33 @@ class BH1750Sensor(LightSensor):
     ONE_TIME_HIGH_RES_MODE2 = 0x21
     ONE_TIME_LOW_RES = 0x23
 
+    def __init__(self):
+        self.i2c = I2C(scl=Pin(5), sda=Pin(4))  # adjust to your I2C pins
+
     def initialize(self):
-        """
-        Initialize the sensor by powering it on and resetting it.
-
-        Raises:
-            IOError: If an I/O error occurs while initializing the sensor.
-        """
-
-        try:
-            self.power_on()
-            self.reset()
-        except IOError as e:
-            logger.error(f"An I/O error occurred while initializing the sensor: {e}")
-        except Exception as e:
-            logger.error(
-                f"An unexpected error occurred while initializing the sensor: {e}"
-            )
+        self.power_on()
+        self.reset()
 
     def power_on(self):
-        """
-        Power on the sensor by writing to the sensor's address.
-
-        Raises:
-            IOError: If an I/O error occurs while powering on the sensor.
-        """
-
-        try:
-            with SMBus(1) as bus:
-                bus.write_byte(self.ADDRESS, self.POWER_ON)
-        except IOError as e:
-            logger.error(f"An I/O error occurred while powering on the sensor: {e}")
-        except Exception as e:
-            logger.error(
-                f"An unexpected error occurred while powering on the sensor: {e}"
-            )
+        self.i2c.writeto(self.ADDRESS, bytes([self.POWER_ON]))
 
     def power_off(self):
-        """
-        Power off the sensor by writing to the sensor's address.
-
-        Raises:
-            IOError: If an I/O error occurs while powering off the sensor.
-        """
-
-        try:
-            with SMBus(1) as bus:
-                bus.write_byte(self.ADDRESS, self.POWER_DOWN)
-        except IOError as e:
-            logger.error(f"An I/O error occurred while powering off the sensor: {e}")
-        except Exception as e:
-            logger.error(
-                f"An unexpected error occurred while powering off the sensor: {e}"
-            )
+        self.i2c.writeto(self.ADDRESS, bytes([self.POWER_DOWN]))
 
     def reset(self):
-        """
-        Reset the sensor to its default settings by writing to the sensor's address.
-
-        Raises:
-            IOError: If an I/O error occurs while resetting the sensor.
-        """
-
-        try:
-            with SMBus(1) as bus:
-                bus.write_byte(self.ADDRESS, self.RESET)
-        except IOError as e:
-            logger.error(f"An I/O error occurred while resetting the sensor: {e}")
-        except Exception as e:
-            logger.error(
-                f"An unexpected error occurred while resetting the sensor: {e}"
-            )
+        self.i2c.writeto(self.ADDRESS, bytes([self.RESET]))
 
     def read_lux(self, mode=CONTINUOUS_HIGH_RES):
-        """
-        Read the lux value from the sensor.
+        self.i2c.writeto(self.ADDRESS, bytes([mode]))
+        time.sleep_ms(
+            24 if mode in (self.CONTINUOUS_HIGH_RES, self.ONE_TIME_HIGH_RES) else 16
+        )
+        data = self.i2c.readfrom(self.ADDRESS, 2)
+        return ((data[0] << 8) | data[1]) / 1.2
 
-        Args:
-            mode (int): The mode to use for reading lux. Default is CONTINUOUS_HIGH_RES.
-
-        Returns:
-            float: The lux value read from the sensor.
-
-        Raises:
-            IOError: If an I/O error occurs while reading lux from the sensor.
-        """
-
-        try:
-            with SMBus(1) as bus:
-                bus.write_byte(self.ADDRESS, mode)
-                sleep_time = 0.16 if mode == self.CONTINUOUS_LOW_RES else 0.12
-                time.sleep(sleep_time)
-                lux_data = bus.read_i2c_block_data(self.ADDRESS, mode, 2)
-                lux = (lux_data[0] << 8 | lux_data[1]) / 1.2
-                return lux
-        except IOError as e:
-            logger.error(
-                f"An I/O error occurred while reading lux from the sensor: {e}"
-            )
-            return None
-        except Exception as e:
-            logger.error(
-                f"An unexpected error occurred while reading lux from the sensor: {e}"
-            )
-            return None
-
-    def set_measurement_time(self, high_bits, low_bits):
-        """
-        Set the measurement time for the sensor.
-
-        Args:
-            high_bits (int): The high bits to set for the measurement time.
-            low_bits (int): The low bits to set for the measurement time.
-
-        Raises:
-            IOError: If an I/O error occurs while setting the measurement time.
-        """
-
-        try:
-            with SMBus(1) as bus:
-                bus.write_byte(self.ADDRESS, 0b01000000 | high_bits)  # High bits
-                bus.write_byte(self.ADDRESS, 0b01100000 | low_bits)  # Low bits
-        except IOError as e:
-            logger.error(
-                f"An I/O error occurred while setting the measurement time: {e}"
-            )
-        except Exception as e:
-            logger.error(
-                f"An unexpected error occurred while setting the measurement time: {e}"
-            )
+    def set_measurement_time(self, high_bits=None, low_bits=None):
+        # This sensor does not support setting measurement time
+        pass
 
 
 class TSL2561Sensor(LightSensor):

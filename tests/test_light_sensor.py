@@ -1,5 +1,6 @@
 from sensors.light import BH1750Sensor
 
+
 def test_bh1750():
     sensor = BH1750Sensor()
 
@@ -16,8 +17,10 @@ def test_bh1750():
     print("Powering off the sensor...")
     sensor.power_off()
 
+
 def main():
     test_bh1750()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()

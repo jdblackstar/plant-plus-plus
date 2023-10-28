@@ -1,6 +1,7 @@
 from controllers.led import NeoPixelLED
 import time
 
+
 def test_neopixel():
     led = NeoPixelLED()
 
@@ -28,21 +29,23 @@ def test_neopixel():
 
     print("Testing the set_color method...")
     try:
-        led.set_color((255,192,203))
+        led.set_color((255, 192, 203))
         print("The LED should transition to pink")
     except:
         print("LED failed to change color.")
 
     print("Testing the transition_color method...")
     try:
-        led.transition_color((128, 0, 128), (255,255,0), 3)
+        led.transition_color((128, 0, 128), (255, 255, 0), 3)
         time.sleep(3)
         print("LED should transition from purple to yellow over 5 seconds")
     except:
         print("LED failed to transition colors")
 
+
 def main():
     test_neopixel()
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     main()
